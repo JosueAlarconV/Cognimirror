@@ -92,6 +92,12 @@ export const LandingPage = ({ onNavigate }: LandingPageProps) => {
                   <span>Ver Video</span>
                 </button>
               </div>
+
+              {/* CORFO Logo Block */}
+              <div className="pt-8">
+                <img src="/logo-corfo.png" alt="Apoyado por CORFO y Gobierno de Chile" className="h-16 md:h-20 object-contain drop-shadow-md hover:scale-105 transition-transform origin-left" />
+              </div>
+
             </div>
           </div>
         </div>

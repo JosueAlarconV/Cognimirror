@@ -1,37 +1,8 @@
 import { useEffect } from 'react';
-import Lenis from '@studio-freight/lenis';
 
 export const useSmoothScroll = () => {
   useEffect(() => {
-    // 1. CONDICIÓN DE RENDIMIENTO: Desactivar en Móviles
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
-
-    let lenis: Lenis | undefined;
-
-    if (!isMobile) {
-      // 2. INICIALIZAR LENIS (Smooth Scroll Ligero)
-      lenis = new Lenis({
-        lerp: 0.1, // Responsividad rápida, sin arrastre lento
-        orientation: 'vertical',
-        gestureOrientation: 'vertical',
-        smoothWheel: true,
-        wheelMultiplier: 1.2, // Un poco más de sensibilidad al scroll
-        touchMultiplier: 2,
-        infinite: false,
-      });
-
-      // Exponer al objeto global para que Canvas (Three.js) lo lea a 60fps sin React state
-      (window as any).lenis = lenis;
-
-      // Bucle de renderizado independiente para Lenis
-      function raf(time: number) {
-        lenis?.raf(time);
-        requestAnimationFrame(raf);
-      }
-      requestAnimationFrame(raf);
-    }
-
-    // 3. INTERSECTION OBSERVER (Fade Up & Stagger)
+    // 1. INTERSECTION OBSERVER (Fade Up & Stagger para animaciones de entrada)
     const observerOptions = {
       root: null,
       rootMargin: '0px 0px -15% 0px',
@@ -70,7 +41,7 @@ export const useSmoothScroll = () => {
       });
     }, observerOptions);
 
-    // 4. INYECTAR OBSERVADORES
+    // 2. INYECTAR OBSERVADORES
     // Esperar a que el DOM esté listo
     setTimeout(() => {
       const mainSections = document.querySelectorAll('section, .main-container');
@@ -92,8 +63,8 @@ export const useSmoothScroll = () => {
     }, 100);
 
     return () => {
-      if (lenis) lenis.destroy();
       revealObserver.disconnect();
     };
   }, []);
 };
+
